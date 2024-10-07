@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Yaso</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400&display=swap'); /* Romantic font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap'); /* Regular font */
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to top right, #ff9a9e, #fad0c4);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .message {
+            font-size: 2.5em;
+            color: #fff;
+            text-transform: uppercase;
+            opacity: 0;
+            position: absolute;
+            max-width: 80%;
+            top: 20%;
+            visibility: hidden;
+        }
+
+        .flirty {
+            font-family: 'Playfair Display', serif; /* Romantic, non-curvy font */
+            font-size: 2.8em;
+            color: #fff;
+        }
+
+        .active {
+            opacity: 1;
+        }
+
+        .small-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .buttons {
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            right: 0;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+            display: none;
+        }
+
+        .button {
+            background-color: #f76c6c;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.5em;
+            margin: 10px;
+        }
+
+        .button:hover {
+            background-color: #ff8787;
+        }
+
+        .gif-left, .gif-right {
+            position: absolute;
+            width: 100px;
+            height: auto;
+        }
+
+        .gif-left {
+            left: 10px;
+            top: 60%;
+        }
+
+        .gif-right {
+            right: 10px;
+            top: 60%;
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: absolute;
+            width: 50px; /* Increase the heart size */
+            height: 50px;
+            background-color: pink;
+            transform: rotate(45deg);
+            animation: floatUp 8s infinite ease-in;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 50px; /* Match the heart size */
+            height: 50px;
+            background-color: pink;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -25px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 25px;
+            top: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                bottom: -50px;
+                opacity: 0;
+                transform: translateX(0) rotate(45deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+                transform: translateX(100px) rotate(45deg);
+            }
+        }
+
+        /* Final text for the last page */
+        .final-message {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5em;
+            color: white;
+            margin-top: 30px;
+        }
+
+        /* Customize font size for smaller screens */
+        @media (max-width: 600px) {
+            .message {
+                font-size: 1.8em;
+            }
+
+            .button {
+                font-size: 1.2em;
+            }
+
+            .gif-left, .gif-right {
+                width: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating hearts -->
+    <div class="heart" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="heart" style="left: 25%; animation-delay: 1s;"></div>
+    <div class="heart" style="left: 40%; animation-delay: 2s;"></div>
+    <div class="heart" style="left: 55%; animation-delay: 3s;"></div>
+    <div class="heart" style="left: 70%; animation-delay: 4s;"></div>
+    <div class="heart" style="left: 85%; animation-delay: 5s;"></div>
+
+    <!-- GIF placeholders -->
+    <img id="leftGif" class="gif-left" alt="Left GIF">
+    <img id="rightGif" class="gif-right" alt="Right GIF">
+
+    <!-- Messages -->
+    <div class="message active" id="message1"></div>
+    <div class="message flirty" id="message2"></div>
+    <div class="message flirty" id="message3"></div>
+    <div class="message flirty" id="message4"></div>
+    <div class="message" id="message5"></div>
+    <div class="message flirty" id="message6"></div>
+    <div class="message flirty" id="message7"></div>
+    <div class="message flirty" id="message8"></div>
+    <div class="message flirty" id="message9"></div>
+    <div class="message" id="message10"></div>
+
+    <!-- Small Text asking to proceed -->
+    <div class="small-text" id="proceedText" style="display:none;">Do you want to proceed?</div>
+
+    <!-- Buttons to proceed -->
+    <div class="buttons" id="buttons">
+        <button class="button" onclick="proceed()">YES, I WANT TO PROCEED ❤️</button>
+        <button class="button" id="noButton" onclick="showSike()">NO 😢</button>
+    </div>
+
+    <!-- Audio for button click sound -->
+    <audio id="clickSound" src="https://www.soundjay.com/button/sounds/button-3.mp3" preload="auto"></audio>
+
+    <script>
+        const messages = [
+            "HEY YASO, THIS IS A WEBSITE MADE BY YOURS TRULY! 😘",
+            "ICL, THIS TOOK A LOT OF TIME 😭, SO I HOPE YOU LIKE IT! ❤️",
+            "YOU’RE THE MOST BEAUTIFUL, INSIDE AND OUT. 😍",
+            "HONESTLY, EVERY TIME I THINK OF YOU, I CAN'T HELP BUT SMILE 😊",
+            "YOU'RE THE PRETTIEST, MOST AMAZING, AND THE BEST THING THAT’S EVER HAPPENED TO ME. 💖",
+            "I LOVE YOU SO MUCH, YASO! 💕",
+            "IM SORRY THIS LAME GIFT WAS ALL I COULD MUSTER FOR YOUR 17TH BIRTHDAY, I PROMISE TO DO BETTER NEXT TIME! 😔",
+            "HAPPY BIRTHDAY GÜZİN ELİF KÖŞGER AKA YASO ❤️",
+            "AKA THE PRETTIEST GIRL IN THE WORLD 🥰",
+            "AKA THE PERSONIFICATION OF PERFECTION 🌹"
+        ];
+
+        const leftGifs = [
+            'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExanB3cHhtOGkyYndyMGcxZGEwOTF3bHRzMGNjYm85anRjMXczb21keCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1HpGQbayrb1g5szUNH/giphy.gif', 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2k5Z3hhbml5d3VkM212c2Z0M3Z1NnMxd3RydTNzY25lNDhoZnFzNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DXsNXjpBUomgYQXCiG/giphy.gif', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ213a2E0MHA1NHFsZjgxZzhsMjFtZjFtOTE5bnU0YnpsbXJjd3E2NSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/RxEw1uF3W8DSlGxmur/giphy.gif', 
+            'https://media.giphy.com/media/W6QFPhpXJ7mQqbLrzX/giphy.gif?cid=790b76117hiqgruf357b6oxiaa5s9vj4kr1z8j84vmorfb1d&ep=v1_gifs_search&rid=giphy.gif&ct=g', 'https://media.giphy.com/media/0voVmkzV7YsSg7oh43/giphy.gif?cid=790b7611aos2blou2zp1xfa2iwi38nhr3r61rjuwao1mu018&ep=v1_gifs_search&rid=giphy.gif&ct=g', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3p6YWs1YTM1dnNqNDc0ZGNweGZ3aTA5cjFsenN2ajNhYmFvOXc1NSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LTcau7EnQLhHkxxG2u/giphy.gif', 
+            'https://media.giphy.com/media/qpCvOBBmBkble/giphy.gif?cid=790b76110vzg4nh8tslov7c7skn5zzzd11r659qyrcrbtdpi&ep=v1_gifs_search&rid=giphy.gif&ct=g', 'https://media.giphy.com/media/mZwyH37L7ZDLq/giphy.gif?cid=790b7611ngzis177esui6oxex7mgu6ewzr69fslk4dqm6cnu&ep=v1_gifs_search&rid=giphy.gif&ct=g', 'https://media.giphy.com/media/1Lh4cwqMZaYJ5ULS46/giphy.gif?cid=790b7611oumhdk90u7tgpcfcofjl1paddk7yhvoexy41l99n&ep=v1_gifs_search&rid=giphy.gif&ct=g', 
+            'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGE5aGtqaTJsZHA4b3dtbGhud25kcnhmdXRpNzVnM2l4cm1yMnB0biZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l2SpQY5R0aYNZqxna/giphy.gif'
+        ];
+
+        const rightGifs = [
+            'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExanB3cHhtOGkyYndyMGcxZGEwOTF3bHRzMGNjYm85anRjMXczb21keCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1HpGQbayrb1g5szUNH/giphy.gif', 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2k5Z3hhbml5d3VkM212c2Z0M3Z1NnMxd3RydTNzY25lNDhoZnFzNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DXsNXjpBUomgYQXCiG/giphy.gif', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ213a2E0MHA1NHFsZjgxZzhsMjFtZjFtOTE5bnU0YnpsbXJjd3E2NSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/RxEw1uF3W8DSlGxmur/giphy.gif', 
+            'https://media.giphy.com/media/W6QFPhpXJ7mQqbLrzX/giphy.gif?cid=790b76117hiqgruf357b6oxiaa5s9vj4kr1z8j84vmorfb1d&ep=v1_gifs_search&rid=giphy.gif&ct=g', 'https://media.giphy.com/media/0voVmkzV7YsSg7oh43/giphy.gif?cid=790b7611aos2blou2zp1xfa2iwi38nhr3r61rjuwao1mu018&ep=v1_gifs_search&rid=giphy.gif&ct=g', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3p6YWs1YTM1dnNqNDc0ZGNweGZ3aTA5cjFsenN2ajNhYmFvOXc1NSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LTcau7EnQLhHkxxG2u/giphy.gif', 
+            'https://media.giphy.com/media/qpCvOBBmBkble/giphy.gif?cid=790b76110vzg4nh8tslov7c7skn5zzzd11r659qyrcrbtdpi&ep=v1_gifs_search&rid=giphy.gif&ct=g', 'https://media.giphy.com/media/mZwyH37L7ZDLq/giphy.gif?cid=790b7611ngzis177esui6oxex7mgu6ewzr69fslk4dqm6cnu&ep=v1_gifs_search&rid=giphy.gif&ct=g', 'https://media.giphy.com/media/1Lh4cwqMZaYJ5ULS46/giphy.gif?cid=790b7611oumhdk90u7tgpcfcofjl1paddk7yhvoexy41l99n&ep=v1_gifs_search&rid=giphy.gif&ct=g', 
+            'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGE5aGtqaTJsZHA4b3dtbGhud25kcnhmdXRpNzVnM2l4cm1yMnB0biZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l2SpQY5R0aYNZqxna/giphy.gif'
+        ];
+
+        let currentMessage = 0;
+        let letterIndex = 0;
+        const typingSpeed = 100; // Speed of letter-by-letter appearance
+
+        // Function to display the message letter by letter
+        function displayMessage() {
+            const messageDiv = document.getElementById(`message${currentMessage + 1}`);
+            const currentText = messages[currentMessage];
+
+            // Set the corresponding GIFs for the current message
+            document.getElementById('leftGif').src = leftGifs[currentMessage];
+            document.getElementById('rightGif').src = rightGifs[currentMessage];
+
+            messageDiv.innerHTML = ''; // Clear the previous text
+            messageDiv.style.visibility = 'visible'; // Show the message
+
+            function typeLetter() {
+                if (letterIndex < currentText.length) {
+                    messageDiv.innerHTML += currentText[letterIndex];
+                    letterIndex++;
+                    setTimeout(typeLetter, typingSpeed); // Delay between each letter
+                } else {
+                    // Once the message is complete, show the small text and buttons
+                    document.getElementById('proceedText').style.display = 'block';
+                    document.getElementById('buttons').style.display = 'block';
+                    document.getElementById('buttons').style.opacity = 1;
+                }
+            }
+
+            typeLetter();
+        }
+
+        // Function to proceed to the next message
+        function proceed() {
+            playClickSound(); // Play click sound
+            // Hide buttons and small text
+            document.getElementById('buttons').style.opacity = 0;
+            document.getElementById('proceedText').style.display = 'none';
+            setTimeout(() => {
+                document.getElementById('buttons').style.display = 'none';
+            }, 500);
+
+            // Clear the current message
+            const messageDiv = document.getElementById(`message${currentMessage + 1}`);
+            messageDiv.classList.remove('active');
+            messageDiv.textContent = '';
+
+            // Move to the next message
+            currentMessage++;
+            letterIndex = 0;
+
+            if (currentMessage < messages.length) {
+                const nextMessageDiv = document.getElementById(`message${currentMessage + 1}`);
+                nextMessageDiv.classList.add('active');
+                setTimeout(displayMessage, 500); // Show next message letter by letter
+            } else {
+                // On the last page, clear everything and show the final message
+                clearPage();
+            }
+        }
+
+        // Function to clear all content except background and hearts, then show the final message
+        function clearPage() {
+            document.body.innerHTML = ''; // Clear all content
+            document.body.style.background = 'linear-gradient(to top right, #ff9a9e, #fad0c4)'; // Keep background color
+            document.body.style.position = 'relative'; // Retain floating hearts
+            // Add floating hearts back
+            document.body.innerHTML += `<div class="heart" style="left: 20%; animation-delay: 1s;"></div>
+                <div class="heart" style="left: 40%; animation-delay: 2s;"></div>
+                <div class="heart" style="left: 60%; animation-delay: 3s;"></div>
+                <div class="heart" style="left: 80%; animation-delay: 4s;"></div>`;
+            // Add final message
+            document.body.innerHTML += '<div class="final-message">THIS IS THE END, GO BACK TO DISCORD AND TELL ME WHAT YOU THINK 😊</div>';
+        }
+
+        // Show the "Sike" message when clicking No
+        function showSike() {
+            playClickSound(); // Play click sound
+            const noButton = document.getElementById('noButton');
+            noButton.textContent = "SIKE, YOU'RE NOT ALLOWED TO DO THIS! NOW CLICK THE RIGHT BUTTON 😉";
+            noButton.disabled = true;
+        }
+
+        // Play button click sound
+        function playClickSound() {
+            const clickSound = document.getElementById('clickSound');
+            clickSound.play();
+        }
+
+        // Start the first message letter by letter when the page loads
+        window.onload = function () {
+            displayMessage(); // Ensure the text starts typing when the page loads
+        };
+    </script>
+</body>
+</html>
